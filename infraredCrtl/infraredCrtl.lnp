@@ -1,0 +1,6 @@
+"main.obj",
+"timeDebug.obj",
+"1602Crtl.obj",
+"infrared.obj" 
+TO "infraredCrtl" 
+RAMSIZE(256) 

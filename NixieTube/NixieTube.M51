@@ -1,0 +1,171 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/15/2020  10:06:40  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE main.obj, timeDebug.obj TO NixieTube RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  timeDebug.obj (TIMEDEBUG)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  NixieTube (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0022H     UNIT         ?DT?MAIN
+            DATA    002AH     0002H     UNIT         _DATA_GROUP_
+            IDATA   002CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0031H     UNIT         ?PR?MAIN?MAIN
+            CODE    00CBH     0028H     UNIT         ?C_INITSEG
+            CODE    00F3H     001EH     UNIT         ?PR?_DELAYMS?TIMEDEBUG
+            CODE    0111H     001BH     UNIT         ?PR?DELAY1S?TIMEDEBUG
+            CODE    012CH     0013H     UNIT         ?PR?T0_TIME?MAIN
+            CODE    013FH     0010H     UNIT         ?PR?INTERRUPTINIT?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   NixieTube (MAIN)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                  002AH    0002H
+  +--> ?PR?INTERRUPTINIT?MAIN
+  +--> ?PR?DELAY1S?TIMEDEBUG
+
+
+
+SYMBOL TABLE OF MODULE:  NixieTube (MAIN)
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2020  10:06:40  PAGE 2
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:013FH         PUBLIC        interruptInit
+  D:00A8H         PUBLIC        IE
+  C:012CH         PUBLIC        T0_time
+  D:00B8H         PUBLIC        IP
+  C:009AH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  D:0008H         PUBLIC        num
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  D:000AH         PUBLIC        ledNum
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          INTERRUPTINIT
+  C:013FH         LINE#         25
+  C:013FH         LINE#         26
+  C:013FH         LINE#         27
+  C:0142H         LINE#         28
+  C:0145H         LINE#         29
+  C:0148H         LINE#         30
+  C:014AH         LINE#         31
+  C:014CH         LINE#         32
+  C:014EH         LINE#         33
+  -------         ENDPROC       INTERRUPTINIT
+  -------         PROC          MAIN
+  -------         DO            
+  D:002AH         SYMBOL        i
+  -------         ENDDO         
+  C:009AH         LINE#         44
+  C:009AH         LINE#         45
+  C:009AH         LINE#         46
+  C:009FH         LINE#         47
+  C:00A2H         LINE#         48
+  C:00A2H         LINE#         49
+  C:00A2H         LINE#         50
+  C:00A5H         LINE#         51
+  C:00B0H         LINE#         52
+  C:00B3H         LINE#         53
+  C:00BBH         LINE#         54
+  C:00C4H         LINE#         55
+  C:00C4H         LINE#         56
+  C:00C9H         LINE#         57
+  C:00C9H         LINE#         69
+  -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2020  10:06:40  PAGE 3
+
+
+  -------         PROC          T0_TIME
+  C:012CH         LINE#         81
+  C:012EH         LINE#         83
+  C:0131H         LINE#         84
+  C:0134H         LINE#         85
+  C:013CH         LINE#         86
+  -------         ENDPROC       T0_TIME
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        TIMEDEBUG
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:00F3H         PUBLIC        _delayMS
+  C:0111H         PUBLIC        delay1s
+  -------         PROC          DELAY1S
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0111H         LINE#         8
+  C:0111H         LINE#         9
+  C:0111H         LINE#         11
+  C:0115H         LINE#         12
+  C:0115H         LINE#         13
+  C:0122H         LINE#         14
+  C:012BH         LINE#         15
+  -------         ENDPROC       DELAY1S
+  -------         PROC          _DELAYMS
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:00F3H         LINE#         22
+  C:00F3H         LINE#         23
+  C:00F3H         LINE#         25
+  C:00FCH         LINE#         26
+  C:00FCH         LINE#         27
+  C:0109H         LINE#         28
+  C:0110H         LINE#         30
+  -------         ENDPROC       _DELAYMS
+  -------         ENDMOD        TIMEDEBUG
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAYMS?TIMEDEBUG
+
+Program Size: data=45.0 xdata=0 code=327
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

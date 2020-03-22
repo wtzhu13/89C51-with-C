@@ -1,0 +1,135 @@
+C51 COMPILER V9.01   INDEPENDENT                                                           03/14/2020 12:59:43 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE INDEPENDENT
+OBJECT MODULE PLACED IN independent.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE keyBoard\independent.c BROWSE DEBUG OBJECTEXTEND PRINT(.\independent.lst) O
+                    -BJECT(independent.obj)
+
+line level    source
+
+   1          #include "../main/sysParameter.h"
+   2          #include "../delay/timeDebug.h"
+   3          #include "../beep/beep.h"
+   4          
+   5          uint k8Flag = 0;
+   6           /**
+   7            * 功能：独立按键的端口初始化
+   8            * 参数：
+   9            * 返回值：
+  10            */
+  11          void keyboardPortInit()
+  12          {
+  13   1          P1 = 0xff;      // 将P1口全部置为高电平
+  14   1      }
+  15           
+  16           /**
+  17            * 功能：按键检测
+  18            * 参数：
+  19            * 返回值：按下按键的标志
+  20            */
+  21          int waitKeyboard()
+  22          {
+  23   1          keyboardPortInit();
+  24   1          switch ((P1 & 0xff))   // 根据P1口的电平判断按键
+  25   1          {
+  26   2          case 0xef:
+  27   2              delayMS(20);       // 延时防抖
+  28   2              if(k5 == 0)
+*** ERROR C202 IN LINE 28 OF KEYBOARD\INDEPENDENT.C: 'k5': undefined identifier
+  29   2              {
+  30   3                  while(!k5);    // 松开按键后启动
+*** ERROR C202 IN LINE 30 OF KEYBOARD\INDEPENDENT.C: 'k5': undefined identifier
+  31   3                  return 5;        
+  32   3              }
+  33   2          case 0xdf:
+  34   2              delayMS(20);
+  35   2              if(k6 == 0)
+*** ERROR C202 IN LINE 35 OF KEYBOARD\INDEPENDENT.C: 'k6': undefined identifier
+  36   2              {
+  37   3                  while(!k6);
+*** ERROR C202 IN LINE 37 OF KEYBOARD\INDEPENDENT.C: 'k6': undefined identifier
+  38   3                  return 6;        
+  39   3              } 
+  40   2          case 0xbf:
+  41   2              delayMS(20);
+  42   2              if(k7 == 0)
+*** ERROR C202 IN LINE 42 OF KEYBOARD\INDEPENDENT.C: 'k7': undefined identifier
+  43   2              {
+  44   3                  while(!k7);
+*** ERROR C202 IN LINE 44 OF KEYBOARD\INDEPENDENT.C: 'k7': undefined identifier
+  45   3                  return 7;        
+  46   3              }
+  47   2          case 0x7f:
+  48   2              delayMS(20);
+C51 COMPILER V9.01   INDEPENDENT                                                           03/14/2020 12:59:43 PAGE 2   
+
+  49   2              if(k8 == 0)
+*** ERROR C202 IN LINE 49 OF KEYBOARD\INDEPENDENT.C: 'k8': undefined identifier
+  50   2              {
+  51   3                  while(!k8);
+*** ERROR C202 IN LINE 51 OF KEYBOARD\INDEPENDENT.C: 'k8': undefined identifier
+  52   3                  return 8;        
+  53   3              }        
+  54   2          default:
+  55   2              return 0;
+  56   2          }
+  57   1      }
+  58          
+  59          /**
+  60            * 功能：根据K8按下的标志位判断是启动定时还是关闭定时
+  61            * 参数：
+  62            * 返回值：
+  63            */
+  64          uint k8Func(uint *timeCountP)
+  65          {
+  66   1          if (k8Flag)
+  67   1          {
+  68   2              TR0 = 1;                      // 启动定时
+  69   2          }
+  70   1          else
+  71   1          {
+  72   2              TR0 = 0;
+  73   2              *timeCountP = 0;              //  定时器停止时，计数表示清零
+  74   2              TH0 = (65536 - 45872) / 256;  // 设置定时器初始值
+  75   2              TL0 = (65536 - 45872) % 256;
+  76   2          }   
+  77   1      }
+  78          
+  79           /**
+  80            * 功能：根据按键选择执行程序
+  81            * 参数：数码管显示数字
+  82            * 返回值：数码管显示数字
+  83            */
+  84          uint keyFunc(uint showNum, uint *timeCountP)
+  85          {
+  86   1          int key = waitKeyboard();
+  87   1          switch (key)
+  88   1              {
+  89   2              case 0:
+  90   2                  break;
+  91   2              case 5:
+  92   2                  beepWork();
+  93   2                  showNum++;
+  94   2                  break;
+  95   2              case 6:
+  96   2                  showNum--;
+  97   2                  break;
+  98   2              case 7:
+  99   2                  showNum = 0;
+ 100   2                  break;
+ 101   2              case 8:
+ 102   2                  k8Flag = !k8Flag;      // 每按一次标志位转换一次
+ 103   2                  k8Func(timeCountP);
+ 104   2                  break;       
+ 105   2              default:
+ 106   2                  break;
+ 107   2              }
+ 108   1          return showNum;
+C51 COMPILER V9.01   INDEPENDENT                                                           03/14/2020 12:59:43 PAGE 3   
+
+ 109   1      }
+ 110          
+ 111           
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  8 ERROR(S)

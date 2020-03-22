@@ -1,0 +1,18 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\AD_study\MCU51_study\NixieTube\NixieTube.uvproj
+Project File Date:  03/07/2020
+
+<h2>Output:</h2>
+Build target 'NixieTube'
+compiling main.c...
+compiling timeDebug.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAYMS?TIMEDEBUG
+Program Size: data=45.0 xdata=0 code=327
+creating hex file from "NixieTube"...
+"NixieTube" - 0 Error(s), 1 Warning(s).

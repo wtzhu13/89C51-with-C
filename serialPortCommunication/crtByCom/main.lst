@@ -1,0 +1,150 @@
+C51 COMPILER V9.01   MAIN                                                                  03/15/2020 10:10:08 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main\main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\main.lst) OBJECT(main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          #include <stdio.h>
+   4          #include "../delay/timeDebug.h"
+   5          #include "../nixieTube/show.h"
+   6          
+   7          #define uint unsigned int
+   8          #define uchar unsigned char
+   9          
+  10          unsigned char flag_uart, i, a, flag_on, flag_time, time_count;
+  11          // uchar code table[] = "I have ";
+  12          uint showNum = 0;
+  13          
+  14          /***********************************************************/
+  15          /*********************introduction**************************/
+  16          /***********************************************************/
+  17          
+  18          void interruptInit()
+  19          {
+  20   1          TMOD = 0x21;    
+  21   1          TH1 = 0xfd;     
+  22   1          TL1 = 0xfd;
+  23   1          //ET1 = 1;  // 用作波特率发生器是，不能启动，不然程序不停进中断，程序会跑飞掉      
+  24   1          TR1 = 1; 
+  25   1          TH0 = (65536 - 50000)/256;      // 设置定时器初始值
+  26   1          TL0 = (65536 - 50000)%256; 
+  27   1          ET0 = 1;                        // 开定时器0中断
+  28   1          SM0 = 0;       
+  29   1          SM1 = 1;
+  30   1          REN = 1;    // 先设置串口模式，在打开接受，不然会议方式0接受数据
+  31   1          EA = 1;         
+  32   1          ES = 1;       
+  33   1      }
+  34          
+  35          void chooseAction()
+  36          {
+  37   1          flag_uart = 0;
+  38   1          ES = 0;
+  39   1          TI = 1;    // 由于putchar函数中的设定，所以使用puts和printf时需要手动将TI设置为1
+  40   1          switch (a)
+  41   1          {
+  42   2          case 'a':
+  43   2              TR0 = 1;
+  44   2              printf("Turn on\n");
+  45   2              break;
+  46   2      
+  47   2          case 'b':
+  48   2              TR0 = 0;
+  49   2              printf("Turn off\n");
+  50   2              break;
+  51   2      
+  52   2          case 'c':
+  53   2              TR0 = 0;
+  54   2              showNum = 0;
+  55   2              printf("clear\n");
+C51 COMPILER V9.01   MAIN                                                                  03/15/2020 10:10:08 PAGE 2   
+
+  56   2              break;
+  57   2          
+  58   2          default:
+  59   2              printf("err\n");
+  60   2              break;
+  61   2          }  
+  62   1          while(!TI);
+  63   1          TI = 0; 
+  64   1          ES = 1;
+  65   1      }
+  66          
+  67          void timeOn()
+  68          {
+  69   1          flag_time = 0;
+  70   1          showNum ++;
+  71   1          ES = 0;
+  72   1          TI = 1;
+  73   1          printf("showNum:%d\n", showNum);
+  74   1          while(!TI);
+  75   1          TI = 0;
+  76   1          ES = 1;
+  77   1      }
+  78          
+  79          /***********************************************************/
+  80          /*********************introduction**************************/
+  81          /***********************************************************/
+  82          
+  83          void main()
+  84          {
+  85   1          interruptInit();
+  86   1          while (1)
+  87   1          {
+  88   2              show2Bit(showNum);
+  89   2              if (flag_uart == 1)
+  90   2              {
+  91   3                  chooseAction();        
+  92   3              } 
+  93   2              if (flag_time == 1)
+  94   2              {
+  95   3                   timeOn();
+  96   3              }
+  97   2                    
+  98   2          }
+  99   1      }
+ 100          
+ 101          void timer0() interrupt 1
+ 102          {
+ 103   1          TH0 = (65536 - 50000)/256;
+ 104   1          TL0 = (65536 - 50000)%256;
+ 105   1          time_count ++;
+ 106   1          if (time_count == 20)
+ 107   1          {
+ 108   2              time_count = 0;
+ 109   2              flag_time = 1;
+ 110   2          }
+ 111   1          
+ 112   1      }
+ 113          
+ 114          /***********************************************************/
+ 115          /*********************introduction**************************/
+ 116          /***********************************************************/
+ 117          
+C51 COMPILER V9.01   MAIN                                                                  03/15/2020 10:10:08 PAGE 3   
+
+ 118          void ser() interrupt 4
+ 119          {
+ 120   1          RI = 0;
+ 121   1          a = SBUF;
+ 122   1          flag_uart = 1;
+ 123   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    204    ----
+   CONSTANT SIZE    =     43    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

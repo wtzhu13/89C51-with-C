@@ -1,0 +1,5 @@
+"main.obj",
+"timeDebug.obj",
+"show.obj" 
+TO "crtByCom" 
+RAMSIZE(256) 

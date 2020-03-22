@@ -1,0 +1,53 @@
+C51 COMPILER V9.01   TIMEDEBUG                                                             03/06/2020 18:39:50 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE TIMEDEBUG
+OBJECT MODULE PLACED IN timeDebug.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE timeDebug.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "sysParameter.h"
+   2          
+   3          /**
+   4           * 函数功能：通过循环实现1秒的延时
+   5           * 参数：无
+   6           * 返回值：无
+   7           */
+   8          void delay()
+   9          {
+  10   1          uint i,j;
+  11   1          for(i=1000;i>0;i--)
+  12   1                       {
+  13   2                               for(j=110;j>0;j--);
+  14   2                       }
+  15   1      }
+  16          
+  17           /**
+  18            * 函数功能：实现X毫秒的延时
+  19            * 参数：需要延时的长短
+  20            * 返回值：无
+  21            */
+  22          void delayMS(uint xms)
+  23          {
+  24   1              uint i, j;
+  25   1              for ( i = xms; i > 0; i--)
+  26   1              {
+  27   2                      for(j = 110; j > 0; j--);
+  28   2              }
+  29   1                      
+  30   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     57    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

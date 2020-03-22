@@ -1,0 +1,36 @@
+C51 COMPILER V9.01   BEEP                                                                  03/08/2020 17:16:22 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE BEEP
+OBJECT MODULE PLACED IN beep.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE beep\beep.c BROWSE DEBUG OBJECTEXTEND PRINT(.\beep.lst) OBJECT(beep.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "../main/sysParameter.h"
+   3          #include "../delay/timeDebug.h" 
+   4          
+   5          void beepWork()
+   6          {
+   7   1          uint j;
+   8   1          for(j=500;j>0;j--)  //蜂鸣器响大约500MS
+   9   1          {
+  10   2              BEEP = ~BEEP;
+  11   2              Delayst(2);         //延时500US   发出大约1KHZ频率的响声 
+  12   2          }
+  13   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     35    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

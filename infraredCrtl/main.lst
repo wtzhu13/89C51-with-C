@@ -1,0 +1,98 @@
+C51 COMPILER V9.01   MAIN                                                                  03/22/2020 17:35:29 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main\main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\main.lst) OBJECT(main.obj)
+
+line level    source
+
+   1          #include <intrins.h>  //包含_nop_()函数定义的头文件
+   2          #include "../delay/timeDebug.h"
+   3          #include "sysParameter.h"
+   4          #include "../1602Ctrl/1602Crtl.h"
+   5          #include "../infrared/infrared.h"
+   6          unsigned char code string[ ]= {"RED-CODE TEST"}; 
+   7          unsigned char interrupt_flag;
+   8          unsigned int LowTime,HighTime;
+   9          unsigned char a[4];
+  10          
+  11          
+  12          /***************************************************
+  13          函数功能：主函数
+  14          ***************************************************/
+  15          
+  16          void main(void)            
+  17          {
+  18   1          unsigned char i;    
+  19   1              LcdInitiate();         //调用LCD初始化函数  
+  20   1          delayMS(10);
+  21   1              WriteInstruction(0x01);//清显示：清屏幕指令
+  22   1              WriteAddress(0x00);  // 设置显示位置为第一行的第1个字
+  23   1              i = 0;
+  24   1              while(string[i] != '\0')    //'\0'是数组结束标志 
+  25   1                      {                                               // 显示字符     WWW.RICHMCU.COM
+  26   2                              WriteData(string[i]);
+  27   2                              i++;    
+  28   2                      }
+  29   1          EA=1;        //开启总中断
+  30   1          EX0=1;       //开外中断0
+  31   1          ET0=1;       //定时器T0中断允许
+  32   1          IT0=1;       //外中断的下降沿触发  
+  33   1          TMOD=0x01;   //使用定时器T0的模式1  
+  34   1          TR0=0;       //定时器T0关闭
+  35   1          P1 = 0x00;
+  36   1          while(1)
+  37   1          {
+  38   2              if(interrupt_flag)
+  39   2              {
+  40   3                  interrupt_flag = 0;
+  41   3                  P1 = ~P1;
+  42   3         
+  43   3              }
+  44   2          }           
+  45   1      }
+  46          
+  47          void Int0(void) interrupt 0
+  48          {
+  49   1          EX0=0;      //关闭外中断0，不再接收二次红外信号的中断，只解码当前红外信号
+  50   1              TH0=0;          //定时器T0的高8位清0
+  51   1              TL0=0;          //定时器T0的低8位清0
+  52   1              TR0=1;          //开启定时器T0                  
+  53   1              while(IR==0);              //如果是低电平就等待，给引导码低电平计时
+  54   1              TR0=0;                            //关闭定时器T0          
+  55   1              LowTime=TH0*256+TL0;  //保存低电平时间
+C51 COMPILER V9.01   MAIN                                                                  03/22/2020 17:35:29 PAGE 2   
+
+  56   1              TH0=0;          //定时器T0的高8位清0
+  57   1              TL0=0;          //定时器T0的低8位清0
+  58   1              TR0=1;          //开启定时器T0
+  59   1              while(IR==1);  //如果是高电平就等待，给引导码高电平计时
+  60   1              TR0=0;            //关闭定时器T0
+  61   1              HighTime=TH0*256+TL0;   //保存引导码的高电平长度
+  62   1              if((LowTime>7800)&&(LowTime<8800)&&(HighTime>3600)&&(HighTime<4700))
+  63   1               {
+  64   2                      //如果是引导码,就开始解码,否则放弃,引导码的低电平计时
+  65   2                 //次数＝9000us/1.085=8294, 判断区间:8300－500＝7800，8300＋500＝8800.
+  66   2                        if(DeCode(a) == 1) // 执行遥控解码功能
+  67   2                       {              
+  68   3                              Disp(a);//调用1602LCD显示函数
+  69   3                       }
+  70   2               }
+  71   1              EX0=1;   //开启外中断X0
+  72   1          interrupt_flag = 1;
+  73   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    249    ----
+   CONSTANT SIZE    =     14    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

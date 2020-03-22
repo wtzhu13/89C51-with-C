@@ -1,0 +1,8 @@
+"main.obj",
+"timeDebug.obj",
+"independent.obj",
+"matrix.obj",
+"show.obj",
+"beep.obj" 
+TO "Keyboard" 
+RAMSIZE(256) 

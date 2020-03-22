@@ -1,0 +1,3 @@
+"main.obj" 
+TO "serialPortCommunication" 
+RAMSIZE(256) 

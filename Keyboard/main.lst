@@ -1,0 +1,74 @@
+C51 COMPILER V9.01   MAIN                                                                  03/08/2020 17:16:21 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main\main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\main.lst) OBJECT(main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "sysParameter.h"
+   3          #include "../delay/timeDebug.h"
+   4          #include "../nixie_tube/show.h"
+   5          #include "../keboard/independent.h"
+   6          #include "../keboard/matrix.h"
+   7          
+   8          uint T0Flag = 0;
+   9          
+  10          void interruptInit()
+  11          {
+  12   1          TMOD = 0x01;                  // 设置定时器0位工作方式1
+  13   1          TH0 = (65536 - 45872) / 256;  // 设置定时器初始值
+  14   1          TL0 = (65536 - 45872) % 256;  
+  15   1          EA = 1;                       // 开启总中断  
+  16   1          ET0 = 1;                      // 开启定时器0中断
+  17   1          TR0 = 0;                      // 等待启动定时器0
+  18   1      }
+  19          
+  20          void main()
+  21          {
+  22   1          uint showNum = 1;  // 初始化显示数字
+  23   1          // show2Bit(showNum);   // 在数码管显示数字
+  24   1          interruptInit();   // 初始化中断
+  25   1          while(1)
+  26   1          {    
+  27   2              // show2Bit(showNum);   // 在数码管显示数字
+  28   2              // showNum = keyFunc(showNum, &T0Flag);   // 等待按键程序       
+  29   2              // if (T0Flag >= 40)
+  30   2              // {
+  31   2              //     T0Flag = 0;
+  32   2              //     showNum++;
+  33   2              // }
+  34   2              showNum = keyboardScan(showNum);
+  35   2          }   
+  36   1      }
+  37          
+  38           /**
+  39            * 功能：
+  40            * 参数：
+  41            * 返回值：
+  42            */
+  43          void T0_time() interrupt 1
+  44          {
+  45   1          T0Flag ++;
+  46   1          TH0 = (65536 - 45872) / 256;  // 设置定时器初始值
+  47   1          TL0 = (65536 - 45872) % 256;
+  48   1           
+  49   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     47    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   MAIN                                                                  03/08/2020 17:16:21 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

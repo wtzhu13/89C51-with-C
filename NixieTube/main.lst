@@ -1,0 +1,112 @@
+C51 COMPILER V9.01   MAIN                                                                  03/15/2020 10:06:39 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main\main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\main.lst) OBJECT(main.obj)
+
+line level    source
+
+   1          /**
+   2           * author: wtzhu
+   3           * date: 20200307
+   4           * function: test NixieTube and interrupt
+   5           * e_mail: wtzhu_13@163.com
+   6           * version:
+   7           */
+   8          
+   9          #include <reg52.h>
+  10          #include "sysParameter.h"
+  11          #include "../delay/timeDebug.h"
+  12          
+  13          int ledNum[16] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90, 0x88, 0x83, 0xc6, 0xa1, 0x86
+             -, 0x8e};
+  14          uint num = 0;
+  15           
+  16          /***********************************************************/
+  17          /*******************中断初始化程序**************************/
+  18          /***********************************************************/
+  19          
+  20           /**
+  21            * 功能：中断初始化
+  22            * 参数：无
+  23            * 返回值：无
+  24            */
+  25          void interruptInit()
+  26          {
+  27   1          TMOD = 0x11;                  // 设置定时器0位工作方式1
+  28   1          TH0 = (65536 - 45872) / 256;  // 设置定时器初始值
+  29   1          TL0 = (65536 - 45872) % 256;  
+  30   1          EA = 1;                       // 开启总中断  
+  31   1          ET0 = 1;                      // 开启定时器0中断
+  32   1          TR0 = 1;                      // 启动定时器0
+  33   1      }
+  34          
+  35          /***********************************************************/
+  36          /*********************主函数入口****************************/
+  37          /***********************************************************/
+  38          
+  39           /**
+  40            * 功能：主函数入口
+  41            * 参数：无
+  42            * 返回值：无
+  43            */
+  44          void main()
+  45          {
+  46   1          uint i = 0;
+  47   1          interruptInit();
+  48   1          while (1)
+  49   1          {       
+  50   2              P2=0xf0;
+  51   2              P0 = ledNum[i];
+  52   2              delay1s();
+  53   2              i++;
+  54   2              if (i >= 16)
+C51 COMPILER V9.01   MAIN                                                                  03/15/2020 10:06:39 PAGE 2   
+
+  55   2              {
+  56   3                   i = 0;
+  57   3              }
+  58   2      //        if (num == 20)
+  59   2      //        {
+  60   2      //            i++;
+  61   2      //            num = 0;               // 时间到了标志位清零
+  62   2      //            if (i >= 16)
+  63   2      //            {
+  64   2      //                i = 0;
+  65   2      //            }
+  66   2      //            
+  67   2      //        }
+  68   2                   
+  69   2          }   
+  70   1      }
+  71          
+  72          /***********************************************************/
+  73          /*********************定时器0中断函数***********************/
+  74          /***********************************************************/
+  75          
+  76           /**
+  77            * 功能：定时器0中断函数
+  78            * 参数：
+  79            * 返回值：
+  80            */
+  81          void T0_time() interrupt 1
+  82          {
+  83   1          TH0 = (65536 - 45872) / 256;      // 每次记满后重新设置初始值
+  84   1          TL0 = (65536 - 45872) % 256;
+  85   1          num++;                            // 进入一次标志位加1
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     84    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     34       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+"main.obj",
+"timeDebug.obj" 
+TO "NixieTube" 
+RAMSIZE(256) 
